@@ -1,22 +1,61 @@
 package com.springsecurity.springsecurity.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
+@Table(name = "customer")
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer customerId;
+
+    private String name;
     private String email;
-    private String password;
+
+    @Column(name = "mobile_number")
+    private String mobileNumber;
+
+    private String pwd;
     private String role;
 
-    public int getId() {
-        return id;
+    @CreationTimestamp
+    @Column(name = "create_dt")
+    private LocalDateTime createDt;
+
+    // Relationships
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Account> accounts;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Loan> loans;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Card> cards;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<AccountTransaction> transactions;
+
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -27,12 +66,20 @@ public class Customer {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getRole() {
@@ -42,4 +89,46 @@ public class Customer {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public LocalDateTime getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(LocalDateTime createDt) {
+        this.createDt = createDt;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    public List<AccountTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<AccountTransaction> transactions) {
+        this.transactions = transactions;
+    }
+
+
 }

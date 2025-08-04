@@ -1,12 +1,28 @@
 package com.springsecurity.springsecurity.controller;
 
+import com.springsecurity.springsecurity.model.Card;
+import com.springsecurity.springsecurity.repo.CardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class CardsController {
-    @GetMapping ("/myCards")
-    public String getCards() {
-        return "This is my cards";
+
+    @Autowired
+    private CardRepository cardRepository;
+
+    @GetMapping("/myCards")
+    public List<Card> getCardDetails(@RequestParam int id) {
+        List<Card> card = cardRepository.findByCustomerCustomerId(id);
+        if (card != null ) {
+            return card;
+        }else {
+            return null;
+        }
     }
+
 }

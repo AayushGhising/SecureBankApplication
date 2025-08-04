@@ -8,7 +8,7 @@ export const APP_CONSTANTS = {
     BALANCE: "/myBalance",
     LOANS: "/myLoans",
     CARDS: "/myCards",
-    CONTACT: "/contact",
+    CONTACT: "/contacts",
     NOTICES: "/notices",
   },
   LOCAL_STORAGE_KEYS: {

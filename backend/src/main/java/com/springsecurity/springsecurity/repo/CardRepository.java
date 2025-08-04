@@ -1,13 +1,14 @@
 package com.springsecurity.springsecurity.repo;
 
-import com.springsecurity.springsecurity.model.Customer;
+import com.springsecurity.springsecurity.model.Card;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
-public interface CustomerRepo extends CrudRepository<Customer, Integer> {
-    List<Customer> findByEmail(String email);
+public interface CardRepository extends CrudRepository<Card, Long> {
+
+    List<Card> findByCustomerCustomerId(int customerId);
+
 }

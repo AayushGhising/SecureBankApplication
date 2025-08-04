@@ -1,7 +1,7 @@
 package com.springsecurity.springsecurity.config;
 
 import com.springsecurity.springsecurity.model.Customer;
-import com.springsecurity.springsecurity.repo.CustomerRepo;
+import com.springsecurity.springsecurity.repo.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MyAuthenticationProvider implements AuthenticationProvider{
 
     @Autowired
-    private CustomerRepo customerRepo;
+    private CustomerRepository customerRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -32,12 +32,12 @@ public class MyAuthenticationProvider implements AuthenticationProvider{
         List<Customer> customers = customerRepo.findByEmail(username);
         if (customers != null && customers.size() > 0) {
             Customer customer = customers.get(0);
-            if (passwordEncoder.matches(password, customer.getPassword())){
+            if (passwordEncoder.matches(password, customer.getPwd())){
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(customer.getRole()));
                 return new UsernamePasswordAuthenticationToken(
                         customer.getEmail(),
-                        customer.getPassword(),
+                        customer.getPwd(),
                         authorities // Assuming Customer has a method to get authorities
                 );
             } else {
