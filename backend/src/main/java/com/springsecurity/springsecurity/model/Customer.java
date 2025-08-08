@@ -1,11 +1,14 @@
 package com.springsecurity.springsecurity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -22,12 +25,27 @@ public class Customer {
     @Column(name = "mobile_number")
     private String mobileNumber;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String pwd;
     private String role;
 
     @CreationTimestamp
     @Column(name = "create_dt")
     private LocalDateTime createDt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="customer",fetch=FetchType.EAGER)
+    private Set<Authority> authorities;
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 
     // Relationships
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

@@ -11,7 +11,7 @@
 @property {Date} createDt - Account creation date*/
 
 export const createUser = (userData = {}) => ({
-  id: userData.id || null,
+  id: userData.customerId || userData.id || null,
   name: userData.name || "",
   email: userData.email || "",
   mobileNumber: userData.mobileNumber || "",

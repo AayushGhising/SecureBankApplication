@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import apiClient from "../services/api.client";
 import { APP_CONSTANTS } from "../constants/app.constants";
 import { createUser } from "../models/user.model";
+// import { getCookie } from "../utils/cookie.utils";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -54,6 +55,42 @@ const Login = () => {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+
+  //   if (!validateForm()) {
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await apiClient.post(
+  //       APP_CONSTANTS.ENDPOINTS.LOGIN,
+  //       formData
+  //     );
+
+  //     if (response.status === APP_CONSTANTS.HTTP_STATUS.OK) {
+  //       const user = createUser(response.data);
+  //       login(user);
+
+  //       // Redirect to intended page or dashboard
+  //       const from = location.state?.from?.pathname || "/dashboard";
+  //       navigate(from, { replace: true });
+  //     }
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //     setError(
+  //       error.response?.data?.message ||
+  //         "Login failed. Please check your credentials."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // src/components/Login.jsx - Updated handleSubmit method
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -65,10 +102,22 @@ const Login = () => {
     setLoading(true);
 
     try {
+      // First, get CSRF token by making a request to any endpoint
+      await apiClient.get("/notices");
+
+      // Create base64 encoded credentials for Basic Auth
+      const credentials = btoa(`${formData.email}:${formData.pwd}`);
+
       const response = await apiClient.post(
         APP_CONSTANTS.ENDPOINTS.LOGIN,
-        formData
+        {},
+        {
+          headers: {
+            Authorization: `Basic ${credentials}`,
+          },
+        }
       );
+      console.log("Login response:", response.data);
 
       if (response.status === APP_CONSTANTS.HTTP_STATUS.OK) {
         const user = createUser(response.data);
@@ -81,8 +130,9 @@ const Login = () => {
     } catch (error) {
       console.error("Login error:", error);
       setError(
-        error.response?.data?.message ||
-          "Login failed. Please check your credentials."
+        error.response?.status === 401
+          ? "Invalid email or password. Please try again."
+          : "Login failed. Please check your credentials."
       );
     } finally {
       setLoading(false);

@@ -46,15 +46,23 @@ public class RegisterController {
         return response;
     }
 
-    @RequestMapping("/user")
-    public Customer getUserDetailsAfterLogin(Authentication authentication) {
-        List<Customer> customers = customerRepository.findByEmail(authentication.getName());
-        if (customers.size() > 0) {
-            return customers.get(0);
-        } else {
-            return null;
-        }
-
+//    @RequestMapping("/user")
+//    public Customer getUserDetailsAfterLogin(Authentication authentication) {
+//        List<Customer> customers = customerRepository.findByEmail(authentication.getName());
+//        if (customers.size() > 0) {
+//            return customers.get(0);
+//        } else {
+//            return null;
+//        }
+//
+//    }
+@PostMapping("/user")
+public ResponseEntity<Customer> getUserDetailsAfterLogin(Authentication authentication) {
+    List<Customer> customers = customerRepository.findByEmail(authentication.getName());
+    if (customers.size() > 0) {
+        return ResponseEntity.status(HttpStatus.OK).body(customers.get(0));
+    } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
+}
 }
