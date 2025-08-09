@@ -1,6 +1,8 @@
 package com.springsecurity.springsecurity.config;
 
+import com.springsecurity.springsecurity.filter.AuthoritiesLoggingAfterFilter;
 import com.springsecurity.springsecurity.filter.CsrfCookieFilter;
+import com.springsecurity.springsecurity.filter.RequestValidationBeforeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -41,6 +43,8 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/contacts", "/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())) // Disable CSRF for simplicity, not recommended for production
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/myAccount", "/myCards", "/myLoans").hasRole("USER")
                         .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
