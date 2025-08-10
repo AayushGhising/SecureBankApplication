@@ -1,8 +1,6 @@
 package com.springsecurity.springsecurity.config;
 
-import com.springsecurity.springsecurity.filter.AuthoritiesLoggingAfterFilter;
-import com.springsecurity.springsecurity.filter.CsrfCookieFilter;
-import com.springsecurity.springsecurity.filter.RequestValidationBeforeFilter;
+import com.springsecurity.springsecurity.filter.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -28,8 +26,9 @@ public class SecurityConfig {
         requestHandler.setCsrfRequestAttributeName("_csrf");
 
         return http
-                .securityContext(security -> security.requireExplicitSave(false))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+//                .securityContext(security -> security.requireExplicitSave(false))
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)) // not needed for jwt token
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:5173")); // Adjust the origin as needed
@@ -37,6 +36,7 @@ public class SecurityConfig {
                     config.setAllowedHeaders(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
                     config.setMaxAge(3600L);
+                    config.addExposedHeader("Authorization");
                     return config;
                 }))
                 .csrf(csrf -> csrf.csrfTokenRequestHandler(requestHandler)
@@ -45,6 +45,8 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFIilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/myAccount", "/myCards", "/myLoans").hasRole("USER")
                         .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
