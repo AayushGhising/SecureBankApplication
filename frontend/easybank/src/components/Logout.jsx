@@ -38,6 +38,7 @@ const Logout = () => {
                   d="M5 13l4 4L19 7"
                 ></path>
               </svg>
+              zz
             </div>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
