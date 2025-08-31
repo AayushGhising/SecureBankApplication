@@ -1,6 +1,7 @@
 package com.springsecurity.springsecurity.controller;
 
 import com.springsecurity.springsecurity.model.NoticeDetail;
+import com.springsecurity.springsecurity.repo.CustomerRepository;
 import com.springsecurity.springsecurity.repo.NoticeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -16,6 +17,8 @@ public class NoticeController {
 
     @Autowired
     private NoticeRepository noticeRepository;
+
+
 
     @GetMapping("/notices")
     public ResponseEntity<List<NoticeDetail>> getNotices() {

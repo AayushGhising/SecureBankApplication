@@ -21,30 +21,30 @@ public class RegisterController {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody Customer customer) {
-        Customer savedCustomer = null;
-        ResponseEntity response = null;
-        try {
-            String hashPwd = passwordEncoder.encode(customer.getPwd());
-            customer.setPwd(hashPwd);
-//            customer.setCreateDt(new Date(System.currentTimeMillis()));
-            savedCustomer = customerRepository.save(customer);
-            if (savedCustomer.getCustomerId() > 0) {
-                response = ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body("Given user details are successfully registered");
-            }
-        } catch (Exception ex) {
-            response = ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An exception occured due to " + ex.getMessage());
-        }
-        return response;
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<String> registerUser(@RequestBody Customer customer) {
+//        Customer savedCustomer = null;
+//        ResponseEntity response = null;
+//        try {
+//            String hashPwd = passwordEncoder.encode(customer.getPwd());
+//            customer.setPwd(hashPwd);
+////            customer.setCreateDt(new Date(System.currentTimeMillis()));
+//            savedCustomer = customerRepository.save(customer);
+//            if (savedCustomer.getCustomerId() > 0) {
+//                response = ResponseEntity
+//                        .status(HttpStatus.CREATED)
+//                        .body("Given user details are successfully registered");
+//            }
+//        } catch (Exception ex) {
+//            response = ResponseEntity
+//                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("An exception occured due to " + ex.getMessage());
+//        }
+//        return response;
+//    }
 
 //    @RequestMapping("/user")
 //    public Customer getUserDetailsAfterLogin(Authentication authentication) {

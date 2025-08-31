@@ -1,5 +1,6 @@
 package com.springsecurity.springsecurity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,6 +34,7 @@ public class Card {
     @Column(name = "create_dt")
     private LocalDateTime createDt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
